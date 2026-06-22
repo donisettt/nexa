@@ -120,7 +120,7 @@ function OnlineMatchBanner({ onStartRandom }) {
                 </div>
             </div>
             <span className="rounded-full bg-[#ede5ff] px-3 py-1.5 text-[10px] font-bold text-[#6366f2]">
-                Seluruh Dunia ⇌
+                Global ⇌
             </span>
         </div>
     );
@@ -252,8 +252,8 @@ function SearchingView({ message, startedAt, busy, onCancel }) {
 /* ─── Matched Chat View ──────────────────────────────────────── */
 function MatchedChatView({ match, user, busy, onEndSession, onFriendRequestChanged }) {
     return (
-        <div className="flex h-full flex-col space-y-5">
-            <div className="flex shrink-0 flex-col gap-3 rounded-xl border border-[#c7d2fe] bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex h-full flex-col sm:space-y-5">
+            <div className="hidden sm:flex shrink-0 flex-col gap-3 rounded-xl border border-[#c7d2fe] bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
                     <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e0e7ff] text-[#6366f2]">
                         <Users size={22} />
@@ -372,8 +372,9 @@ export default function MatchingPage({ onNavigate, onFriendRequestChanged, user 
                     <style>{`
                         body { overflow: hidden !important; }
                         footer { display: none !important; }
+                        nav { display: none !important; }
                     `}</style>
-                    <div className="h-[calc(100vh-104px)]">
+                    <div className="h-[100dvh] md:h-[calc(100vh-104px)] fixed inset-0 z-50 md:relative md:inset-auto md:z-auto bg-[#eef2ff] md:bg-transparent p-0 md:p-0">
                         <MatchedChatView
                             busy={busyAction === 'end'}
                             match={matching.match}
@@ -412,7 +413,7 @@ export default function MatchingPage({ onNavigate, onFriendRequestChanged, user 
                         )}
                     </div>
 
-                    <aside>
+                    <aside className="min-w-0">
                         <RecommendationPanel onFriendRequestChanged={onFriendRequestChanged} />
                     </aside>
                 </div>

@@ -5,9 +5,9 @@ import DirectChatPanel from '../friends/DirectChatPanel';
 
 export default function MessagesPage({ activeFriendChat, onOpenChat, onBack, friendSummary, refreshKey, user }) {
     return (
-        <div className="flex h-[calc(100vh-104px)] overflow-hidden rounded-xl border border-[#c7d2fe] bg-white shadow-sm">
+        <div className={`flex flex-col md:flex-row overflow-hidden rounded-xl border border-[#c7d2fe] bg-white shadow-sm ${activeFriendChat ? 'h-[100dvh] md:h-[calc(100vh-104px)] fixed inset-0 z-50 md:relative md:inset-auto md:z-auto' : 'h-[calc(100vh-200px)] md:h-[calc(100vh-104px)]'}`}>
             {/* Left Sidebar (Contact List) */}
-            <div className={`flex w-full flex-col border-r border-[#c7d2fe] bg-[#f8faff] md:w80 lg:w-96 shrink-0 ${activeFriendChat ? 'hidden md:flex' : 'flex'}`}>
+            <div className={`flex w-full flex-col border-r border-[#c7d2fe] bg-[#f8faff] md:w-80 lg:w-96 shrink-0 ${activeFriendChat ? 'hidden md:flex' : 'flex'}`}>
                 {/* Header */}
                 <div className="flex shrink-0 items-center justify-between border-b border-[#c7d2fe] bg-white px-5 py-4">
                     <h2 className="text-lg font-black text-[#1e1033]">Pesan</h2>

@@ -69,8 +69,8 @@ function FriendsPage({ activeFriendChat, onOpenChat, onBack, friendSummary, refr
                         />
                     )}
                 </div>
-                <aside className="space-y-5">
-                    <div className="rounded-lg border border-[#c7d2fe] bg-white p-4 shadow-sm">
+                <aside className="space-y-5 min-w-0">
+                    <div className="rounded-lg border border-[#c7d2fe] bg-white p-4 shadow-sm min-w-0">
                         <div className="flex items-start gap-3">
                             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#ede5ff] text-[#6366f2]">
                                 <Users size={21} aria-hidden="true" />
@@ -228,7 +228,9 @@ export default function Dashboard({ onLogout, user, setUser }) {
             case 'messages':
                 return (
                     <>
-                        <style>{`body { overflow: hidden !important; } footer { display: none !important; }`}</style>
+                        <style>{`
+                            ${activeFriendChat ? 'body { overflow: hidden !important; } footer { display: none !important; } nav { display: none !important; }' : ''}
+                        `}</style>
                         <MessagesPage
                             activeFriendChat={activeFriendChat}
                             friendSummary={friendSummary}
@@ -288,7 +290,7 @@ export default function Dashboard({ onLogout, user, setUser }) {
                                 </div>
                             </main>
 
-                            <aside className="space-y-6">
+                            <aside className="space-y-6 min-w-0">
                                 <div className="min-w-0">
                                     <FriendsPanel
                                         activeChatId={activeFriendChat?.id}

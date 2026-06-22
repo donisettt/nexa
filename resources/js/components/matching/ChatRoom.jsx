@@ -376,9 +376,9 @@ export default function ChatRoom({ allowFriendRequest = false, match, user, onEn
             />
         ) : null}
 
-        <div className="flex h-full flex-col overflow-hidden rounded-lg border border-[#c7d2fe] bg-[#eef2ff]">
+        <div className="flex h-full flex-col overflow-hidden md:rounded-lg md:border border-[#c7d2fe] bg-[#eef2ff]">
             {/* ─── Chat Header ─── */}
-            <div className="flex flex-col gap-3 border-b border-[#c7d2fe] bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#c7d2fe] bg-white px-3 py-2 sm:px-4 sm:py-3">
                 <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#e0e7ff] ring-1 ring-[#c7d2fe]">
                         {match?.partner_avatar_url ? (
@@ -444,7 +444,7 @@ export default function ChatRoom({ allowFriendRequest = false, match, user, onEn
                         <button
                             onClick={onEndSession}
                             disabled={busy}
-                            className="h-9 rounded-md bg-white px-3 text-xs font-bold text-[#a25545] ring-1 ring-[#c7d2fe] transition hover:bg-[#fff7f5] disabled:opacity-50"
+                            className="h-9 rounded-md bg-white px-2.5 sm:px-3 text-xs font-bold text-[#a25545] ring-1 ring-[#c7d2fe] transition hover:bg-[#fff7f5] disabled:opacity-50"
                             type="button"
                         >
                             {busy ? 'Mengakhiri...' : 'Akhiri Sesi'}
