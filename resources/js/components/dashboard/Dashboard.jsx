@@ -16,6 +16,7 @@ import MessagesPage from '../messages/MessagesPage';
 import ProfilePage from '../profile/ProfilePage';
 import NotificationsPage from '../notifications/NotificationsPage';
 import BottomNavigation from '../BottomNavigation';
+import TimelinePage from '../timeline/TimelinePage';
 
 /* ─── Placeholder Page ───────────────────────────────────────── */
 function PlaceholderPage({ icon: Icon, title, description }) {
@@ -249,6 +250,11 @@ export default function Dashboard({ onLogout, user, setUser }) {
             case 'notifications':
                 return (
                     <NotificationsPage onNavigate={navigateTo} />
+                );
+
+            case 'timeline':
+                return (
+                    <TimelinePage user={user} />
                 );
 
             case 'settings':

@@ -60,6 +60,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function statuses(): HasMany
+    {
+        return $this->hasMany(Status::class);
+    }
+
     /**
      * Get the user's avatar URL.
      */

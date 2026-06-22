@@ -42,6 +42,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/mark-all-read', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
     Route::post('/notifications/{id}/mark-read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+
+    // Status / Timeline Routes
+    Route::get('/statuses', [\App\Http\Controllers\StatusController::class, 'index'])->name('statuses.index');
+    Route::post('/statuses', [\App\Http\Controllers\StatusController::class, 'store'])->name('statuses.store');
+    Route::delete('/statuses/{status}', [\App\Http\Controllers\StatusController::class, 'destroy'])->name('statuses.destroy');
+    Route::post('/statuses/{status}/like', [\App\Http\Controllers\StatusLikeController::class, 'toggle'])->name('statuses.like.toggle');
+    Route::post('/statuses/{status}/share', [\App\Http\Controllers\StatusShareController::class, 'store'])->name('statuses.share.store');
+    Route::get('/statuses/{status}/comments', [\App\Http\Controllers\StatusCommentController::class, 'index'])->name('statuses.comments.index');
+    Route::post('/statuses/{status}/comments', [\App\Http\Controllers\StatusCommentController::class, 'store'])->name('statuses.comments.store');
+    Route::delete('/statuses/comments/{comment}', [\App\Http\Controllers\StatusCommentController::class, 'destroy'])->name('statuses.comments.destroy');
 });
 
 Route::view('/', 'app')->name('welcome');

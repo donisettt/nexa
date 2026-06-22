@@ -8,6 +8,7 @@ import {
     Settings,
     Sparkles,
     Users,
+    Globe,
 } from 'lucide-react';
 
 const navItems = [
@@ -16,6 +17,7 @@ const navItems = [
     { id: 'call-matching', label: 'Voice Game', icon: Phone },
     { id: 'friends', label: 'Daftar Teman', icon: Users },
     { id: 'messages', label: 'Pesan', icon: MessageCircle },
+    { id: 'timeline', label: 'Timeline', icon: Globe },
 ];
 
 export default function AppSidebar({ activeItem, notificationCount = 0, onSelectItem, open }) {

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Home, MessageCircle, Search, UserRound, Users } from 'lucide-react';
+import { Home, MessageCircle, Search, UserRound, Globe } from 'lucide-react';
 
 const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'matching', label: 'Chat', icon: Search },
-    { id: 'friends', label: 'Teman', icon: Users },
+    { id: 'timeline', label: 'Timeline', icon: Globe },
     { id: 'messages', label: 'Pesan', icon: MessageCircle },
     { id: 'profile', label: 'Profile', icon: UserRound },
 ];
@@ -16,7 +16,7 @@ export default function BottomNavigation({ activeItem, onSelectItem, notificatio
                 {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = activeItem === item.id;
-                    const showBadge = item.id === 'friends' && notificationCount > 0; // If pending requests
+                    const showBadge = item.id === 'messages' && notificationCount > 0; // fallback to messages if pending friends
 
                     return (
                         <button
