@@ -40,10 +40,17 @@ function App() {
     };
 
     const handleLogout = async () => {
-        const { data } = await window.axios.post('/auth/logout');
-        syncCsrfToken(data.csrf_token);
-        setUser(null);
-        navigate('/login');
+        try {
+            const { data } = await window.axios.post('/auth/logout');
+            syncCsrfToken(data.csrf_token);
+        } catch (error) {
+            console.warn('Logout error:', error);
+            // Even if logout fails on server (e.g., CSRF mismatch/session expired), 
+            // we should log out locally.
+        } finally {
+            setUser(null);
+            navigate('/login');
+        }
     };
 
     const authMode = path === '/register' ? 'register' : 'login';

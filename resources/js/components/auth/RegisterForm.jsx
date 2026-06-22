@@ -47,14 +47,13 @@ export default function RegisterForm({ onAuthenticated, onNavigate }) {
     return (
         <form className="w-full space-y-5" onSubmit={submit}>
             {/* Google Registration Button */}
-            <button
-                type="button"
+            <a
+                href="/auth/google"
                 className="flex w-full items-center justify-center gap-3 rounded-lg border border-[#e2e8f0] bg-white px-4 py-3 text-sm font-semibold text-[#1e1033] shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6366f2]/20"
-                onClick={() => alert('Fitur Google Login belum diintegrasikan di backend.')}
             >
                 <GoogleIcon />
                 <span>Sign up with Google</span>
-            </button>
+            </a>
 
             {/* Divider */}
             <div className="relative flex items-center py-2">
