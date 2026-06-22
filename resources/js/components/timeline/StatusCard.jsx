@@ -1,8 +1,38 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Heart, MessageCircle, Share2, Trash2, Globe, Users, Smile, Image as ImageIcon, X, SendHorizontal } from 'lucide-react';
+import { Heart, MessageCircle, Share2, Trash2, Globe, Users, Smile, Image as ImageIcon, X, SendHorizontal, ZoomIn } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { id } from 'date-fns/locale';
 import EmojiPicker from 'emoji-picker-react';
+
+function ImageLightbox({ src, alt, onClose }) {
+    useEffect(() => {
+        const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
+        document.addEventListener('keydown', handleKey);
+        return () => document.removeEventListener('keydown', handleKey);
+    }, [onClose]);
+
+    return (
+        <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 backdrop-blur-sm"
+            style={{ animation: 'fade-in 0.15s ease' }}
+            onClick={onClose}
+        >
+            <button
+                onClick={onClose}
+                className="absolute top-4 right-4 text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition"
+            >
+                <X size={22} />
+            </button>
+            <img
+                src={src}
+                alt={alt || 'Gambar'}
+                className="max-w-[92vw] max-h-[90vh] object-contain rounded-xl shadow-2xl"
+                style={{ animation: 'modal-in 0.2s ease' }}
+                onClick={(e) => e.stopPropagation()}
+            />
+        </div>
+    );
+}
 
 function VisibilityBadge({ visibility }) {
     if (visibility === 'friends') {
@@ -74,6 +104,7 @@ export default function StatusCard({ status, currentUser, onDeleted }) {
 
     // Reply comment state
     const [replyingTo, setReplyingTo] = useState(null); // comment id
+    const [lightboxSrc, setLightboxSrc] = useState(null);
     const [replyText, setReplyText] = useState('');
     const [replyImage, setReplyImage] = useState(null);
     const [replyImagePreview, setReplyImagePreview] = useState(null);
@@ -242,13 +273,16 @@ export default function StatusCard({ status, currentUser, onDeleted }) {
                         <p className="text-[13px] font-bold text-[#1e1033]">{comment.user.name}</p>
                         {comment.content && <p className="text-[14px] text-[#3f3152] whitespace-pre-wrap">{comment.content}</p>}
                         {comment.image_path && (
-                            <div className="mt-2 rounded-xl overflow-hidden max-w-[200px] sm:max-w-[250px]">
+                            <div className="mt-2 rounded-xl overflow-hidden max-w-[200px] sm:max-w-[250px] relative group">
                                 <img 
                                     src={`/storage/${comment.image_path}`} 
                                     alt="Lampiran" 
-                                    className="w-full h-auto object-contain bg-gray-100 cursor-pointer hover:opacity-90 transition"
-                                    onClick={() => window.open(`/storage/${comment.image_path}`, '_blank')}
+                                    className="w-full h-auto object-contain bg-gray-100 cursor-zoom-in"
+                                    onClick={() => setLightboxSrc(`/storage/${comment.image_path}`)}
                                 />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition flex items-center justify-center pointer-events-none">
+                                    <ZoomIn size={20} className="text-white opacity-0 group-hover:opacity-100 drop-shadow transition" />
+                                </div>
                             </div>
                         )}
                     </div>
@@ -339,7 +373,7 @@ export default function StatusCard({ status, currentUser, onDeleted }) {
     };
 
     return (
-        <div className="bg-white rounded-2xl border border-[#c7d2fe] p-4 sm:p-5 shadow-sm">
+        <div className="bg-white rounded-2xl border border-[#c7d2fe] p-4 sm:p-5 shadow-sm overflow-hidden">
             {/* Header */}
             <div className="flex justify-between items-start mb-3">
                 <div className="flex items-center gap-3">
@@ -386,13 +420,19 @@ export default function StatusCard({ status, currentUser, onDeleted }) {
                     </p>
                 )}
                 {status.image_path && (
-                    <div className="rounded-xl overflow-hidden bg-gray-100 h-[280px] sm:h-[320px]">
+                    <div className="rounded-xl overflow-hidden bg-gray-100 h-[280px] sm:h-[320px] relative group cursor-zoom-in"
+                        onClick={() => setLightboxSrc(`/storage/${status.image_path}`)}
+                    >
                         <img
                             src={`/storage/${status.image_path}`}
                             alt="Status"
-                            className="w-full h-full object-cover cursor-pointer hover:opacity-95 transition"
-                            onClick={() => window.open(`/storage/${status.image_path}`, '_blank')}
+                            className="w-full h-full object-cover transition group-hover:brightness-95"
                         />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                            <div className="bg-black/30 rounded-full p-2">
+                                <ZoomIn size={22} className="text-white" />
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
@@ -435,41 +475,43 @@ export default function StatusCard({ status, currentUser, onDeleted }) {
                             </div>
                         )}
                         
-                        <form onSubmit={(e) => submitComment(e)} className="flex items-end gap-2">
-                            <div className="flex-1 bg-[#f8fafc] border border-[#e2e8f0] rounded-2xl flex items-center px-2 py-1 focus-within:ring-2 focus-within:ring-[#6366f2]/20">
+                        <form onSubmit={(e) => submitComment(e)} className="w-full">
+                            {/* Input + Send row */}
+                            <div className="flex items-center gap-2">
                                 <input
                                     type="text"
                                     value={newComment}
                                     onChange={e => setNewComment(e.target.value)}
                                     placeholder="Tulis komentar..."
-                                    className="flex-1 bg-transparent px-2 py-1.5 text-sm focus:outline-none"
+                                    className="flex-1 min-w-0 bg-[#f8fafc] border border-[#e2e8f0] rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6366f2]/20"
                                 />
-                                
-                                <div className="flex items-center gap-1 px-1 relative">
-                                    <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="p-1.5 text-gray-400 hover:text-[#6366f2] transition rounded-full hover:bg-gray-100">
-                                        <Smile size={18} />
-                                    </button>
-                                    
-                                    <button type="button" onClick={() => fileInputRef.current?.click()} className="p-1.5 text-gray-400 hover:text-[#6366f2] transition rounded-full hover:bg-gray-100">
-                                        <ImageIcon size={18} />
-                                    </button>
-                                    <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={(e) => handleImageSelect(e, false)} />
-
-                                    {showEmojiPicker && (
-                                        <div className="absolute bottom-12 right-0 z-50 shadow-xl rounded-xl border border-gray-100 overflow-hidden">
-                                            <EmojiPicker onEmojiClick={(e) => onEmojiClick(e, false)} width={300} height={400} />
-                                        </div>
-                                    )}
-                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={!newComment.trim() && !commentImage}
+                                    className="p-2.5 rounded-full bg-[#6366f2] text-white disabled:opacity-40 transition hover:bg-[#4f46e5] shrink-0"
+                                >
+                                    <SendHorizontal size={18} />
+                                </button>
                             </div>
-                            
-                            <button
-                                type="submit"
-                                disabled={!newComment.trim() && !commentImage}
-                                className="p-2.5 rounded-full bg-[#6366f2] text-white disabled:opacity-40 transition hover:bg-[#4f46e5] shrink-0"
-                            >
-                                <SendHorizontal size={18} />
-                            </button>
+
+                            {/* Toolbar row: emoji + image */}
+                            <div className="flex items-center gap-1 mt-1.5 px-1 relative">
+                                <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#6366f2] transition rounded-full px-2 py-1 hover:bg-gray-100">
+                                    <Smile size={16} />
+                                    <span className="hidden sm:inline">Emoji</span>
+                                </button>
+                                <button type="button" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#6366f2] transition rounded-full px-2 py-1 hover:bg-gray-100">
+                                    <ImageIcon size={16} />
+                                    <span className="hidden sm:inline">Foto</span>
+                                </button>
+                                <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={(e) => handleImageSelect(e, false)} />
+
+                                {showEmojiPicker && (
+                                    <div className="absolute top-8 left-0 z-50 shadow-xl rounded-xl border border-gray-100 overflow-hidden">
+                                        <EmojiPicker onEmojiClick={(e) => onEmojiClick(e, false)} width={Math.min(300, window.innerWidth - 32)} height={360} />
+                                    </div>
+                                )}
+                            </div>
                         </form>
                     </div>
 
@@ -484,6 +526,12 @@ export default function StatusCard({ status, currentUser, onDeleted }) {
                         )}
                     </div>
                 </div>
+            )}
+            {lightboxSrc && (
+                <ImageLightbox
+                    src={lightboxSrc}
+                    onClose={() => setLightboxSrc(null)}
+                />
             )}
         </div>
     );

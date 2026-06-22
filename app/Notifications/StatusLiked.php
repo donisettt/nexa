@@ -5,10 +5,9 @@ namespace App\Notifications;
 use App\Models\User;
 use App\Models\Status;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class StatusLiked extends Notification implements ShouldQueue
+class StatusLiked extends Notification
 {
     use Queueable;
 
